@@ -19,7 +19,7 @@ public class Pontos implements Serializable {
     public Pontos() {
     }
 
-    public Pontos(String capa, String descricao, Long id, String localizacao, String nome) {
+    public Pontos( Long id, String nome, String descricao, String localizacao, String capa) {
         this.capa = capa;
         this.descricao = descricao;
         this.id = id;
