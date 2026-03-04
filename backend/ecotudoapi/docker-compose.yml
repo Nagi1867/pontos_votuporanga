@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      POSTGRES_DB: ecotudo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jao
+    ports:
+      - 5432:5432
+    networks:
+      - gabriel-network
+
+  rest-react-java-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.DATASOURCE.URL: jdbc:postgresql://db:5432/ecotudo
+      SPRING.DATASOURCE.USERNAME: postgres
+      SPRING.DATASOURCE.PASSWORD: jao
+      SPRING.JPA.DATABASE-PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - gabriel-network
+
+networks:
+  gabriel-network:
+    driver: bridge
