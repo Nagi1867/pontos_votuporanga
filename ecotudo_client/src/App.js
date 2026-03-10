@@ -1,7 +1,10 @@
-import React from "react";
-
 export default function App() {
   return (
-    <h1>Teste</h1>
-  );
+    <div className="bg-red-700">
+      <h1 className="text-4xl text-red-500">
+      Teste Tailwind
+      </h1>
+    </div>
+
+  )
 }
