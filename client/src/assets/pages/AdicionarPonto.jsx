@@ -2,6 +2,7 @@ import { useState } from "react"
 import Sidebar from "../components/Sidebar"
 import Header from "../components/Header"
 import FormAdicionarPonto from "../components/FormAdicionarPonto"
+import api from "../../services/api"
 
 export default function AdicionarPonto() {
 
