@@ -1,6 +1,7 @@
 export default function EcopontoCard({ nome, endereco, materiais }) {
   return (
-    <div className="bg-white rounded-2xl shadow overflow-hidden">
+
+    <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition">
 
       <div className="h-40 bg-gradient-to-b from-gray-200 to-gray-300 flex items-center justify-center">
         <div className="w-12 h-12 bg-green-600 rounded-full"></div>
@@ -20,20 +21,20 @@ export default function EcopontoCard({ nome, endereco, materiais }) {
           {materiais.map((m, i) => (
             <span
               key={i}
-              className="px-3 py-1 bg-gray-100 text-sm rounded-full"
+              className="px-3 py-1 text-xs md:text-sm bg-gray-100 rounded-full"
             >
               {m}
             </span>
           ))}
         </div>
 
-        <div className="flex gap-3 mt-5">
+        <div className="flex flex-col sm:flex-row gap-3 mt-5">
 
-          <button className="flex-1 bg-green-100 text-green-700 py-2 rounded-lg">
+          <button className="flex-1 bg-green-100 text-green-700 py-2 rounded-lg text-sm">
             Editar
           </button>
 
-          <button className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg">
+          <button className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg text-sm">
             Ver no mapa
           </button>
 
@@ -42,5 +43,6 @@ export default function EcopontoCard({ nome, endereco, materiais }) {
       </div>
 
     </div>
+
   )
 }

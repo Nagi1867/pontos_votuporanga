@@ -1,9 +1,13 @@
+import { useState } from "react"
 import Sidebar from "../../components/Sidebar"
 import Header from "../../components/Header"
 import Stats from "../../components/Stats"
 import EcopontoCard from "../../components/EcopontoCard"
 
 export default function Pontos() {
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
   const pontos = [
     {
       nome: "Ecoponto Central",
@@ -18,25 +22,25 @@ export default function Pontos() {
   ]
 
   return (
-    <div className="flex h-screen bg-slate-100">
-      
-      <Sidebar />
+    <div className="flex min-h-screen bg-slate-100">
 
-      <div className="flex-1 flex flex-col">
+      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
 
-        <Header />
+      <div className="flex-1 flex flex-col w-full">
 
-        <div className="p-8 space-y-6 overflow-auto">
+        <Header setSidebarOpen={setSidebarOpen} />
+
+        <main className="p-4 md:p-6 lg:p-8 space-y-6">
 
           <Stats />
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
             {pontos.map((p, i) => (
               <EcopontoCard key={i} {...p} />
             ))}
           </div>
 
-        </div>
+        </main>
 
       </div>
 
