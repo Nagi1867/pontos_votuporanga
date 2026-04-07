@@ -1,10 +1,19 @@
-export default function EcopontoCard({ nome, endereco, materiais }) {
+export default function EcopontoCard({ nome, endereco, descricao, capa }) {
   return (
 
     <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition">
 
-      <div className="h-40 bg-gradient-to-b from-gray-200 to-gray-300 flex items-center justify-center">
-        <div className="w-12 h-12 bg-green-600 rounded-full"></div>
+      {/* CAPA */}
+      <div className="h-40 bg-gray-200 flex items-center justify-center">
+        {capa ? (
+          <img 
+            src={capa} 
+            alt={nome}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-12 h-12 bg-green-600 rounded-full"></div>
+        )}
       </div>
 
       <div className="p-5">
@@ -17,24 +26,20 @@ export default function EcopontoCard({ nome, endereco, materiais }) {
           {endereco}
         </p>
 
-        <div className="flex flex-wrap gap-2 mt-4">
-          {materiais.map((m, i) => (
-            <span
-              key={i}
-              className="px-3 py-1 text-xs md:text-sm bg-gray-100 rounded-full"
-            >
-              {m}
-            </span>
-          ))}
-        </div>
+        {/* DESCRIÇÃO */}
+        {descricao && (
+          <p className="text-sm text-gray-600 mt-3">
+            {descricao}
+          </p>
+        )}
 
         <div className="flex flex-col sm:flex-row gap-3 mt-5">
 
-          <button className="flex-1 bg-green-100 text-green-700 py-2 rounded-lg text-sm">
+          <button className="flex-1 bg-green-100 text-green-700 py-2 rounded-lg text-sm hover:bg-green-200 transition">
             Editar
           </button>
 
-          <button className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg text-sm">
+          <button className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg text-sm hover:bg-blue-200 transition">
             Ver no mapa
           </button>
 

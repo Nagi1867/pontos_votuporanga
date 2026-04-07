@@ -1,25 +1,22 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Sidebar from "../../components/Sidebar"
 import Header from "../../components/Header"
 import Stats from "../../components/Stats"
 import EcopontoCard from "../../components/EcopontoCard"
 
-export default function Pontos() {
+import api from "../../../services/api"
 
+export default function Pontos() {
+  const [pontos, setPontos] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const pontos = [
-    {
-      nome: "Ecoponto Central",
-      endereco: "Av. Paulista, 1000 - Bela Vista, São Paulo - SP",
-      materiais: ["Plástico", "Papel", "Vidro", "Metal"]
-    },
-    {
-      nome: "Ponto de Coleta Vila Mariana",
-      endereco: "R. Domingos de Morais, 1234 - Vila Mariana, São Paulo - SP",
-      materiais: ["Plástico", "Papel", "Eletrônicos"]
-    }
-  ]
+  useEffect(() => {
+    api.get("/pontos")
+      .then(response => {
+        setPontos(response.data)
+      })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
     <div className="flex min-h-screen bg-slate-100">
@@ -35,8 +32,14 @@ export default function Pontos() {
           <Stats />
 
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-            {pontos.map((p, i) => (
-              <EcopontoCard key={i} {...p} />
+            {pontos.map((p) => (
+              <EcopontoCard
+                key={p.id}
+                nome={p.nome}
+                endereco={p.localizacao}
+                descricao={p.descricao}
+                capa={p.capa}
+              />
             ))}
           </div>
 
