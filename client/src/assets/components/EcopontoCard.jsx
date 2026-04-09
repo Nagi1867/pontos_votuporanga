@@ -1,7 +1,25 @@
-export default function EcopontoCard({ nome, endereco, descricao, capa }) {
+export default function EcopontoCard({ nome, endereco, descricao, capa, onDelete }) {
   return (
 
-    <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition">
+    <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition relative">
+
+      {/* BOTÃO X */}
+      <button onClick={onDelete} className="absolute top-3 right-3 bg-white/80 backdrop-blur p-2 rounded-full shadow hover:bg-red-100 transition">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-4 h-4 text-gray-600 hover:text-red-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M6 18L18 6M6 6l12 12" 
+          />
+        </svg>
+      </button>
 
       {/* CAPA */}
       <div className="h-40 bg-gray-200 flex items-center justify-center">
@@ -26,7 +44,6 @@ export default function EcopontoCard({ nome, endereco, descricao, capa }) {
           {endereco}
         </p>
 
-        {/* DESCRIÇÃO */}
         {descricao && (
           <p className="text-sm text-gray-600 mt-3">
             {descricao}
@@ -48,6 +65,5 @@ export default function EcopontoCard({ nome, endereco, descricao, capa }) {
       </div>
 
     </div>
-
   )
 }

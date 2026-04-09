@@ -18,6 +18,16 @@ export default function Pontos() {
       .catch(err => console.log(err))
   }, [])
 
+  async function deletePonto(id) {
+    try {
+      await api.delete(`pontos/${id}`)
+
+      setPontos(pontos.filter(book => book.id !== id))
+    } catch (err) {
+      alert('Delete failed! Try again.')
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-slate-100">
 
@@ -39,6 +49,7 @@ export default function Pontos() {
                 endereco={p.localizacao}
                 descricao={p.descricao}
                 capa={p.capa}
+                onDelete={() => deletePonto(p.id)}
               />
             ))}
           </div>
