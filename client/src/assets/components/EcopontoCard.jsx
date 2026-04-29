@@ -1,4 +1,4 @@
-export default function EcopontoCard({ nome, endereco, descricao, capa, onDelete }) {
+export default function EcopontoCard({ nome, endereco, descricao, capa, onDelete, onEdit}) {
   return (
 
     <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition relative">
@@ -52,7 +52,7 @@ export default function EcopontoCard({ nome, endereco, descricao, capa, onDelete
 
         <div className="flex flex-col sm:flex-row gap-3 mt-5">
 
-          <button className="flex-1 bg-green-100 text-green-700 py-2 rounded-lg text-sm hover:bg-green-200 transition">
+          <button onClick={onEdit} className="flex-1 bg-green-100 text-green-700 py-2 rounded-lg text-sm hover:bg-green-200 transition">
             Editar
           </button>
 

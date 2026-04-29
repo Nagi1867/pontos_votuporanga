@@ -8,6 +8,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<Pontos />} />
         <Route path="/adicionarponto" element={<AdicionarPonto />} />
+        <Route path="/adicionarponto/:id" element={<AdicionarPonto />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,164 +1,114 @@
-import { useState } from "react"
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../../services/api";
 
 export default function FormAdicionarPonto() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const [materiais, setMateriais] = useState([])
+  const [nome, setNome] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [localizacao, setLocalizacao] = useState("");
+  const [capa, setCapa] = useState("");
 
-  const tipos = [
-    "Plástico",
-    "Papel",
-    "Vidro",
-    "Metal",
-    "Eletrônicos",
-    "Baterias",
-    "Óleo"
-  ]
-
-  function toggleMaterial(tipo) {
-
-    if (materiais.includes(tipo)) {
-      setMateriais(materiais.filter(m => m !== tipo))
-    } else {
-      setMateriais([...materiais, tipo])
+  useEffect(() => {
+    if (id) {
+      api.get(`/pontos/${id}`)
+        .then(res => {
+          setNome(res.data.nome);
+          setDescricao(res.data.descricao);
+          setLocalizacao(res.data.localizacao);
+          setCapa(res.data.capa);
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao carregar ponto");
+        });
     }
+  }, [id]);
 
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault()
+  async function handleSubmit(e) {
+    e.preventDefault();
 
     const data = {
-      nome: e.target.nome.value,
-      endereco: e.target.endereco.value,
-      latitude: e.target.latitude.value,
-      longitude: e.target.longitude.value,
-      materiais
+      nome,
+      descricao,
+      localizacao,
+      capa,
+    };
+
+    try {
+      if (id) {
+        // UPDATE
+        await api.put(`/pontos/${id}`, data);
+      } else {
+        // CREATE
+        await api.post("/pontos", data);
+      }
+
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao salvar");
     }
-
-    console.log(data)
-
-    alert("Ponto adicionado (simulação)")
   }
 
   return (
-
     <form
       onSubmit={handleSubmit}
       className="bg-white p-6 md:p-8 rounded-2xl shadow space-y-6"
     >
-
-      {/* Nome */}
-
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Nome do ponto
-        </label>
-
+        <label className="block text-sm font-medium mb-1">Nome</label>
         <input
-          name="nome"
           required
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
           className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
         />
       </div>
 
-      {/* Endereço */}
-
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Endereço
-        </label>
-
+        <label className="block text-sm font-medium mb-1">Descrição</label>
         <input
-          name="endereco"
-          required
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
           className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
         />
       </div>
 
-      {/* Coordenadas */}
-
-      <div className="grid md:grid-cols-2 gap-4">
-
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Latitude
-          </label>
-
-          <input
-            name="latitude"
-            required
-            className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Longitude
-          </label>
-
-          <input
-            name="longitude"
-            required
-            className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
-          />
-        </div>
-
+      <div>
+        <label className="block text-sm font-medium mb-1">Localização</label>
+        <input
+          required
+          value={localizacao}
+          onChange={(e) => setLocalizacao(e.target.value)}
+          className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
+        />
       </div>
-
-      {/* Materiais */}
 
       <div>
-
-        <label className="block text-sm font-medium mb-2">
-          Materiais aceitos
-        </label>
-
-        <div className="flex flex-wrap gap-2">
-
-          {tipos.map((tipo) => (
-
-            <button
-              type="button"
-              key={tipo}
-              onClick={() => toggleMaterial(tipo)}
-              className={`px-4 py-2 rounded-full text-sm border transition
-              
-              ${materiais.includes(tipo)
-                ? "bg-green-600 text-white border-green-600"
-                : "bg-gray-100 text-gray-600 border-gray-200"
-              }
-              
-              `}
-            >
-              {tipo}
-            </button>
-
-          ))}
-
-        </div>
-
+        <label className="block text-sm font-medium mb-2">Capa</label>
+        <input
+          value={capa}
+          onChange={(e) => setCapa(e.target.value)}
+          className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
+        />
       </div>
 
-      {/* Botões */}
-
-      <div className="flex flex-col md:flex-row gap-3 pt-4">
-
-        <button
-          type="submit"
-          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
-        >
-          Salvar Ecoponto
+      <div className="flex gap-3 pt-4">
+        <button className="flex-1 bg-green-600 text-white py-3 rounded-lg">
+          {id ? "Atualizar" : "Criar"}
         </button>
 
         <button
           type="button"
+          onClick={() => navigate(-1)}
           className="flex-1 bg-gray-200 py-3 rounded-lg"
         >
           Cancelar
         </button>
-
       </div>
-
     </form>
-  )
+  );
 }
