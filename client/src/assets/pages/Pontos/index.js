@@ -10,6 +10,7 @@ import api from "../../../services/api";
 
 export default function Pontos() {
   const [pontos, setPontos] = useState([]);
+  const [pesquisa, setPesquisa] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ export default function Pontos() {
       .catch((err) => console.log(err));
   }, []);
 
-
   async function deletePonto(id) {
     try {
       await api.delete(`pontos/${id}`);
@@ -33,12 +33,35 @@ export default function Pontos() {
     }
   }
 
+  async function pesquisarPontos(nome) {
+    try {
+      if (!nome.trim()) {
+        const response = await api.get("/pontos");
+        setPontos(response.data);
+        return;
+      }
+
+      const response = await api.get(
+        `/pontos/pesquisar?nome=${encodeURIComponent(nome)}`,
+      );
+
+      setPontos(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
 
       <div className="flex-1 flex flex-col w-full">
-        <Header setSidebarOpen={setSidebarOpen} />
+        <Header
+          setSidebarOpen={setSidebarOpen}
+          pesquisa={pesquisa}
+          setPesquisa={setPesquisa}
+          pesquisarPontos={pesquisarPontos}
+        />
 
         <main className="p-4 md:p-6 lg:p-8 space-y-6">
           <Stats />

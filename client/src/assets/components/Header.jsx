@@ -1,4 +1,4 @@
-export default function Header({ setSidebarOpen }) {
+export default function Header({ setSidebarOpen, pesquisa, setPesquisa, pesquisarPontos }) {
   return (
     <header className="bg-white border-b px-4 md:px-8 py-4 flex items-center justify-between">
 
@@ -34,6 +34,11 @@ export default function Header({ setSidebarOpen }) {
 
       <input
         placeholder="Buscar..."
+        value={pesquisa}
+        onChange={(e) => {
+          setPesquisa(e.target.value)
+          pesquisarPontos(e.target.value)
+        }}
         className="hidden md:block bg-gray-100 rounded-xl px-4 py-2 w-64 outline-none"
       />
 
