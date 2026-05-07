@@ -28,6 +28,11 @@ public class PontosResource {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/pesquisar")
+    public List<Pontos> pesquisar(@RequestParam String nome) {
+        return service.findByNome(nome);
+    }
+
     @PostMapping
     public ResponseEntity<Pontos> insert(@RequestBody Pontos obj) {
         obj = service.insert(obj);

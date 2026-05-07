@@ -27,6 +27,10 @@ public class PontosService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public List<Pontos> findByNome(String nome) {
+        return repository.findByNome(nome);
+    }
+
     public Pontos insert(Pontos obj) {
         return repository.save(obj);
     }
