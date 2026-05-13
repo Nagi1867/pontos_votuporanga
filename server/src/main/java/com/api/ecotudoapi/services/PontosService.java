@@ -28,7 +28,7 @@ public class PontosService {
     }
 
     public List<Pontos> findByNome(String nome) {
-        return repository.findByNome(nome);
+        return repository.findByNomeContainingIgnoreCase(nome);
     }
 
     public Pontos insert(Pontos obj) {

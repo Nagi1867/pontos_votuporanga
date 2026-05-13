@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PontosRepository extends JpaRepository<Pontos, Long> {
-    List<Pontos> findByNome(String nome);
+    List<Pontos> findByNomeContainingIgnoreCase(String nome);
 }
