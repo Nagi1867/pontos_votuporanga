@@ -15,16 +15,20 @@ public class Pontos implements Serializable {
     private String descricao;
     private String localizacao;
     private String capa;
+    private Double latitude;
+    private Double longitude;
 
     public Pontos() {
     }
 
-    public Pontos( Long id, String nome, String descricao, String localizacao, String capa) {
-        this.capa = capa;
-        this.descricao = descricao;
+    public Pontos(Long id, String nome, String descricao, String localizacao, String capa, Double latitude, Double longitude) {
         this.id = id;
-        this.localizacao = localizacao;
         this.nome = nome;
+        this.descricao = descricao;
+        this.localizacao = localizacao;
+        this.capa = capa;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getCapa() {
@@ -65,6 +69,22 @@ public class Pontos implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     @Override

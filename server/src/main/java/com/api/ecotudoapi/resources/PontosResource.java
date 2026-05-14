@@ -1,5 +1,6 @@
 package com.api.ecotudoapi.resources;
 
+import com.api.ecotudoapi.dto.PontoDistanciaDTO;
 import com.api.ecotudoapi.entities.Pontos;
 import com.api.ecotudoapi.services.PontosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,10 @@ public class PontosResource {
     public ResponseEntity<Pontos> update(@PathVariable Long id, @RequestBody Pontos obj) {
         obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @GetMapping("/proximos")
+    public List<PontoDistanciaDTO> buscarProximos(@RequestParam Double lat, @RequestParam Double lng) {
+        return service.buscarPontosProximos(lat, lng);
     }
 }

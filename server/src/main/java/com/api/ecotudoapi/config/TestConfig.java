@@ -16,7 +16,7 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Pontos pontos = new Pontos(null, "Ecotudo votuporanga", "Ecotudo", "Votuporanga", "jfjifdj");
+        Pontos pontos = new Pontos((Long) null, "Ecotudo votuporanga", "Ecotudo", "Votuporanga", "jfjifdj", 1000.0, 2000.0);
         repository.save(pontos);
     }
 }
