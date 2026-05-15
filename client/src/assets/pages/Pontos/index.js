@@ -33,6 +33,30 @@ export default function Pontos() {
     }
   }
 
+  async function buscarPontosProximos() {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        try {
+          const response = await api.get(
+            `/pontos/proximos?lat=${lat}&lng=${lng}`,
+          );
+
+          setPontos(response.data);
+        } catch (err) {
+          console.log(err);
+        }
+      },
+
+      (error) => {
+        console.log(error);
+        alert("Erro ao obter localização");
+      },
+    );
+  }
+
   async function pesquisarPontos(nome) {
     try {
       if (!nome.trim()) {
@@ -73,18 +97,28 @@ export default function Pontos() {
             + Novo Ecoponto
           </button>
 
+          <button
+            onClick={buscarPontosProximos}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg ml-3"
+          >
+            Pontos Próximos
+          </button>
+
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-            {pontos.map((p) => (
+            {pontos.map((item) => {
+              const p = item.ponto || item;
+              return (
               <EcopontoCard
                 key={p.id}
                 nome={p.nome}
                 endereco={p.localizacao}
                 descricao={p.descricao}
                 capa={p.capa}
+                distancia={item.distancia}
                 onDelete={() => deletePonto(p.id)}
                 onEdit={() => navigate(`/adicionarponto/${p.id}`)}
               />
-            ))}
+            )})}
           </div>
         </main>
       </div>
