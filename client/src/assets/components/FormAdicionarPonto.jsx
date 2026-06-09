@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
+import MapaSelecao from "./MapaSelecao";
 
 export default function FormAdicionarPonto() {
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -18,13 +18,10 @@ export default function FormAdicionarPonto() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-
     if (id) {
-
       api
         .get(`/pontos/${id}`)
         .then((res) => {
-
           setNome(res.data.nome);
           setDescricao(res.data.descricao);
           setLocalizacao(res.data.localizacao);
@@ -32,45 +29,15 @@ export default function FormAdicionarPonto() {
 
           setLatitude(res.data.latitude);
           setLongitude(res.data.longitude);
-
         })
         .catch((err) => {
-
           console.error(err);
           alert("Erro ao carregar ponto");
-
         });
-
     }
-
   }, [id]);
 
-  function pegarLocalizacao() {
-
-    navigator.geolocation.getCurrentPosition(
-
-      (position) => {
-
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-
-        alert("Localização capturada com sucesso!");
-
-      },
-
-      (error) => {
-
-        console.log(error);
-        alert("Erro ao obter localização");
-
-      }
-
-    );
-
-  }
-
   async function handleSubmit(e) {
-
     e.preventDefault();
 
     setLoading(true);
@@ -85,36 +52,24 @@ export default function FormAdicionarPonto() {
     };
 
     try {
-
       if (id) {
-
         // UPDATE
         await api.put(`/pontos/${id}`, data);
-
       } else {
-
         // CREATE
         await api.post("/pontos", data);
-
       }
 
       navigate("/");
-
     } catch (err) {
-
       console.error(err);
       alert("Erro ao salvar");
-
     } finally {
-
       setLoading(false);
-
     }
-
   }
 
   return (
-
     <form
       onSubmit={handleSubmit}
       className="
@@ -126,13 +81,9 @@ export default function FormAdicionarPonto() {
         space-y-6
       "
     >
-
       {/* NOME */}
       <div>
-
-        <label className="block text-sm font-medium mb-1">
-          Nome
-        </label>
+        <label className="block text-sm font-medium mb-1">Nome</label>
 
         <input
           required
@@ -150,15 +101,11 @@ export default function FormAdicionarPonto() {
             transition
           "
         />
-
       </div>
 
       {/* DESCRIÇÃO */}
       <div>
-
-        <label className="block text-sm font-medium mb-1">
-          Descrição
-        </label>
+        <label className="block text-sm font-medium mb-1">Descrição</label>
 
         <textarea
           value={descricao}
@@ -177,15 +124,11 @@ export default function FormAdicionarPonto() {
             transition
           "
         />
-
       </div>
 
       {/* LOCALIZAÇÃO */}
       <div>
-
-        <label className="block text-sm font-medium mb-1">
-          Localização
-        </label>
+        <label className="block text-sm font-medium mb-1">Localização</label>
 
         <input
           required
@@ -204,27 +147,22 @@ export default function FormAdicionarPonto() {
           "
         />
 
-        {/* BOTÃO GEOLOCALIZAÇÃO */}
-        <button
-          type="button"
-          onClick={pegarLocalizacao}
-          className="
-            mt-3
-            bg-blue-600
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            hover:bg-blue-700
-            transition
-          "
-        >
-          Usar minha localização
-        </button>
+        {/* LOCALIZAÇÃO NO MAPA */}
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Localização no mapa
+          </label>
+
+          <MapaSelecao
+            latitude={latitude}
+            longitude={longitude}
+            setLatitude={setLatitude}
+            setLongitude={setLongitude}
+          />
+        </div>
 
         {/* COORDENADAS */}
         <div className="grid grid-cols-2 gap-4 mt-4">
-
           <input
             value={latitude}
             readOnly
@@ -250,17 +188,12 @@ export default function FormAdicionarPonto() {
               rounded-lg
             "
           />
-
         </div>
-
       </div>
 
       {/* CAPA */}
       <div>
-
-        <label className="block text-sm font-medium mb-2">
-          Capa
-        </label>
+        <label className="block text-sm font-medium mb-2">Capa</label>
 
         <input
           value={capa}
@@ -280,7 +213,6 @@ export default function FormAdicionarPonto() {
 
         {/* PREVIEW */}
         {capa && (
-
           <img
             src={capa}
             alt="Preview"
@@ -293,14 +225,11 @@ export default function FormAdicionarPonto() {
               border
             "
           />
-
         )}
-
       </div>
 
       {/* BOTÕES */}
       <div className="flex gap-3 pt-4">
-
         <button
           disabled={loading}
           className="
@@ -314,15 +243,7 @@ export default function FormAdicionarPonto() {
             disabled:opacity-50
           "
         >
-
-          {
-            loading
-              ? "Salvando..."
-              : id
-                ? "Atualizar"
-                : "Criar"
-          }
-
+          {loading ? "Salvando..." : id ? "Atualizar" : "Criar"}
         </button>
 
         <button
@@ -339,11 +260,7 @@ export default function FormAdicionarPonto() {
         >
           Cancelar
         </button>
-
       </div>
-
     </form>
-
   );
-
 }
