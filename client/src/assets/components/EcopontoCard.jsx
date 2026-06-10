@@ -32,11 +32,11 @@ export default function EcopontoCard({
 
       {/* CAPA */}
       <div className="h-40 bg-gray-200 flex items-center justify-center">
-        {capa ? (
-          <img src={capa} alt={nome} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-12 h-12 bg-green-600 rounded-full"></div>
-        )}
+        <img
+          src={`images/${capa}`}
+          alt={nome}
+          className="w-full h-full object-cover"
+        />
       </div>
 
       <div className="p-5">

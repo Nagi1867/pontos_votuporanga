@@ -195,35 +195,22 @@ export default function FormAdicionarPonto() {
       <div>
         <label className="block text-sm font-medium mb-2">Capa</label>
 
-        <input
+        <select
           value={capa}
           onChange={(e) => setCapa(e.target.value)}
-          className="
-            w-full
-            bg-gray-100
-            px-4
-            py-2
-            rounded-lg
-            outline-none
-            focus:ring-2
-            focus:ring-green-500
-            transition
-          "
-        />
+          className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
+        >
+          <option value="">Selecione uma capa</option>
+          <option value="lixeira.jpg">Lixeira</option>
+          <option value="lixeiras.jpg">Lixeiras</option>
+          <option value="papel.jpg">Papel</option>
+        </select>
 
-        {/* PREVIEW */}
         {capa && (
           <img
-            src={capa}
+            src={`/images/lixeira.jpg`}
             alt="Preview"
-            className="
-              w-full
-              h-56
-              object-cover
-              rounded-xl
-              mt-4
-              border
-            "
+            className="w-full h-52 object-cover rounded-lg mt-3"
           />
         )}
       </div>
