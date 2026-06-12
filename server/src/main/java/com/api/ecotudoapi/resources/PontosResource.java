@@ -23,6 +23,11 @@ public class PontosResource {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/debug")
+    public ResponseEntity<List<Pontos>> debug() {
+        return ResponseEntity.ok(service.findAll());
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<Pontos> findById(@PathVariable Long id) {
         Pontos obj = service.findById(id);

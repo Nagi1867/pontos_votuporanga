@@ -44,6 +44,8 @@ export default function Pontos() {
             `/pontos/proximos?lat=${lat}&lng=${lng}`,
           );
 
+          console.log(response.data);
+
           setPontos(response.data);
         } catch (err) {
           console.log(err);

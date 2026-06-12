@@ -33,7 +33,7 @@ export default function EcopontoCard({
       {/* CAPA */}
       <div className="h-40 bg-gray-200 flex items-center justify-center">
         <img
-          src={`images/${capa}`}
+          src={`/images/${capa}`}
           alt={nome}
           className="w-full h-full object-cover"
         />
@@ -46,7 +46,7 @@ export default function EcopontoCard({
 
         {distancia && (
           <p className="text-sm text-blue-600 mt-1">
-            {distancia.toFixed(1)} km de distância
+            {String(distancia)} km de distância
           </p>
         )}
 
