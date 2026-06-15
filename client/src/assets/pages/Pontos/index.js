@@ -110,17 +110,20 @@ export default function Pontos() {
             {pontos.map((item) => {
               const p = item.ponto || item;
               return (
-              <EcopontoCard
-                key={p.id}
-                nome={p.nome}
-                endereco={p.localizacao}
-                descricao={p.descricao}
-                capa={p.capa}
-                distancia={item.distancia}
-                onDelete={() => deletePonto(p.id)}
-                onEdit={() => navigate(`/adicionarponto/${p.id}`)}
-              />
-            )})}
+                <EcopontoCard
+                  key={p.id}
+                  nome={p.nome}
+                  endereco={p.localizacao}
+                  descricao={p.descricao}
+                  capa={p.capa}
+                  latitude={p.latitude}
+                  longitude={p.longitude}
+                  distancia={item.distancia}
+                  onDelete={() => deletePonto(p.id)}
+                  onEdit={() => navigate(`/adicionarponto/${p.id}`)}
+                />
+              );
+            })}
           </div>
         </main>
       </div>

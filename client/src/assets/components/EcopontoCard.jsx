@@ -3,10 +3,23 @@ export default function EcopontoCard({
   endereco,
   descricao,
   capa,
+  latitude,
+  longitude,
   distancia,
   onDelete,
   onEdit,
 }) {
+  function abrirMapa() {
+    if (!latitude || !longitude) {
+      alert("Localização indisponível.");
+      return;
+    }
+
+    window.open(
+      `https://www.google.com/maps?q=${latitude},${longitude}`,
+      "_blank",
+    );
+  }
   return (
     <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition relative">
       {/* BOTÃO X */}
@@ -60,7 +73,10 @@ export default function EcopontoCard({
             Editar
           </button>
 
-          <button className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg text-sm hover:bg-blue-200 transition">
+          <button
+            onClick={abrirMapa}
+            className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg text-sm hover:bg-blue-200 transition"
+          >
             Ver no mapa
           </button>
         </div>
