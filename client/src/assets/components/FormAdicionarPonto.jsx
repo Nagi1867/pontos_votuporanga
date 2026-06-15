@@ -208,7 +208,7 @@ export default function FormAdicionarPonto() {
 
         {capa && (
           <img
-            src={`/images/lixeira.jpg`}
+            src={`/images/${capa}`}
             alt="Preview"
             className="w-full h-52 object-cover rounded-lg mt-3"
           />
