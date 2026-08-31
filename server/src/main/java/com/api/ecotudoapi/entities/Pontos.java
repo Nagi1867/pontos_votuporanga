@@ -3,6 +3,8 @@ package com.api.ecotudoapi.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +19,13 @@ public class Pontos implements Serializable {
     private String capa;
     private Double latitude;
     private Double longitude;
+    @ElementCollection
+    @CollectionTable(
+            name = "ponto_materiais",
+            joinColumns = @JoinColumn(name = "ponto_id")
+    )
+    @Column(name = "material")
+    private List<String> materiaisAceitos = new ArrayList<>();
 
     public Pontos() {
     }
@@ -85,6 +94,14 @@ public class Pontos implements Serializable {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public List<String> getMateriaisAceitos() {
+        return materiaisAceitos;
+    }
+
+    public void setMateriaisAceitos(List<String> materiaisAceitos) {
+        this.materiaisAceitos = materiaisAceitos;
     }
 
     @Override
