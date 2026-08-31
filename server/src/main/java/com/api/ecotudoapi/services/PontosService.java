@@ -18,13 +18,14 @@ import java.util.Optional;
 
 @Service
 public class PontosService {
+
     @Autowired
     private PontosRepository repository;
-    
+
     public List<Pontos> findAll() {
         return repository.findAll();
     }
-    
+
     public Pontos findById(Long id) {
         Optional<Pontos> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
@@ -53,7 +54,9 @@ public class PontosService {
     public Pontos update(Long id, Pontos obj) {
         try {
             Pontos entity = repository.getReferenceById(id);
+
             updateData(entity, obj);
+
             return repository.save(entity);
         }
         catch (EntityNotFoundException e) {
@@ -96,12 +99,15 @@ public class PontosService {
         return RAIO_TERRA * c;
     }
 
-    public List<PontoDistanciaDTO> buscarPontosProximos(Double latitude, Double longitude) {
+    public List<PontoDistanciaDTO> buscarPontosProximos(
+            Double latitude,
+            Double longitude
+    ) {
         List<Pontos> pontos = repository.findAll();
 
         List<PontoDistanciaDTO> resultado = new ArrayList<>();
 
-        for(Pontos ponto : pontos) {
+        for (Pontos ponto : pontos) {
             if (ponto.getLatitude() != null && ponto.getLongitude() != null) {
                 double distancia = calcularDistancia(
                         latitude,
@@ -110,11 +116,15 @@ public class PontosService {
                         ponto.getLongitude()
                 );
 
-                resultado.add(new PontoDistanciaDTO(ponto, distancia));
+                resultado.add(
+                        new PontoDistanciaDTO(ponto, distancia)
+                );
             }
         }
 
-        resultado.sort(Comparator.comparing(PontoDistanciaDTO::getDistancia));
+        resultado.sort(
+                Comparator.comparing(PontoDistanciaDTO::getDistancia)
+        );
 
         return resultado;
     }
