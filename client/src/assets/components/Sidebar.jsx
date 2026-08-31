@@ -1,3 +1,5 @@
+import { Recycle } from "lucide-react";
+
 export default function Sidebar({ open, setOpen }) {
   return (
     <>
@@ -14,14 +16,18 @@ export default function Sidebar({ open, setOpen }) {
         md:translate-x-0`}
       >
         <div>
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-green-600 rounded-lg"></div>
+          <a href="/">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                <Recycle className="w-6 h-6 text-white" />
+              </div>
 
-            <div>
-              <h1 className="font-bold text-lg">EcoTudo</h1>
-              <p className="text-sm text-gray-500">Pontos de Coleta</p>
+              <div>
+                <h1 className="font-bold text-lg">EcoTudo</h1>
+                <p className="text-sm text-gray-500">Pontos de Coleta</p>
+              </div>
             </div>
-          </div>
+          </a>
           <a href="/adicionarponto">
             <button className="w-full bg-green-600 text-white py-3 rounded-xl shadow hover:bg-green-700">
               + Adicionar Ponto

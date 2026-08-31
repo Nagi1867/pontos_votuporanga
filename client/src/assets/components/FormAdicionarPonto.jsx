@@ -3,6 +3,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import MapaSelecao from "./MapaSelecao";
 
+const materiaisDisponiveis = [
+  "Papel",
+  "Plástico",
+  "Vidro",
+  "Metal",
+  "Eletrônicos",
+  "Pilhas e baterias",
+  "Óleo de cozinha",
+  "Pneus",
+  "Roupas",
+];
+
 export default function FormAdicionarPonto() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,10 +23,9 @@ export default function FormAdicionarPonto() {
   const [descricao, setDescricao] = useState("");
   const [localizacao, setLocalizacao] = useState("");
   const [capa, setCapa] = useState("");
-
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-
+  const [materiaisAceitos, setMateriaisAceitos] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -22,13 +33,15 @@ export default function FormAdicionarPonto() {
       api
         .get(`/pontos/${id}`)
         .then((res) => {
-          setNome(res.data.nome);
-          setDescricao(res.data.descricao);
-          setLocalizacao(res.data.localizacao);
-          setCapa(res.data.capa);
+          const ponto = res.data;
 
-          setLatitude(res.data.latitude);
-          setLongitude(res.data.longitude);
+          setNome(ponto.nome || "");
+          setDescricao(ponto.descricao || "");
+          setLocalizacao(ponto.localizacao || "");
+          setCapa(ponto.capa || "");
+          setLatitude(ponto.latitude ?? "");
+          setLongitude(ponto.longitude ?? "");
+          setMateriaisAceitos(ponto.materiaisAceitos || []);
         })
         .catch((err) => {
           console.error(err);
@@ -36,6 +49,16 @@ export default function FormAdicionarPonto() {
         });
     }
   }, [id]);
+
+  function alterarMaterial(material) {
+    setMateriaisAceitos((prev) => {
+      if (prev.includes(material)) {
+        return prev.filter((item) => item !== material);
+      }
+
+      return [...prev, material];
+    });
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -47,16 +70,15 @@ export default function FormAdicionarPonto() {
       descricao,
       localizacao,
       capa,
-      latitude,
-      longitude,
+      latitude: latitude === "" ? null : Number(latitude),
+      longitude: longitude === "" ? null : Number(longitude),
+      materiaisAceitos,
     };
 
     try {
       if (id) {
-        // UPDATE
         await api.put(`/pontos/${id}`, data);
       } else {
-        // CREATE
         await api.post("/pontos", data);
       }
 
@@ -81,9 +103,10 @@ export default function FormAdicionarPonto() {
         space-y-6
       "
     >
-      {/* NOME */}
       <div>
-        <label className="block text-sm font-medium mb-1">Nome</label>
+        <label className="block text-sm font-medium mb-1">
+          Nome
+        </label>
 
         <input
           required
@@ -103,9 +126,10 @@ export default function FormAdicionarPonto() {
         />
       </div>
 
-      {/* DESCRIÇÃO */}
       <div>
-        <label className="block text-sm font-medium mb-1">Descrição</label>
+        <label className="block text-sm font-medium mb-1">
+          Descrição
+        </label>
 
         <textarea
           value={descricao}
@@ -126,9 +150,10 @@ export default function FormAdicionarPonto() {
         />
       </div>
 
-      {/* LOCALIZAÇÃO */}
       <div>
-        <label className="block text-sm font-medium mb-1">Localização</label>
+        <label className="block text-sm font-medium mb-1">
+          Localização
+        </label>
 
         <input
           required
@@ -147,8 +172,7 @@ export default function FormAdicionarPonto() {
           "
         />
 
-        {/* LOCALIZAÇÃO NO MAPA */}
-        <div>
+        <div className="mt-4">
           <label className="block text-sm font-medium mb-2">
             Localização no mapa
           </label>
@@ -161,7 +185,6 @@ export default function FormAdicionarPonto() {
           />
         </div>
 
-        {/* COORDENADAS */}
         <div className="grid grid-cols-2 gap-4 mt-4">
           <input
             value={latitude}
@@ -191,31 +214,118 @@ export default function FormAdicionarPonto() {
         </div>
       </div>
 
-      {/* CAPA */}
       <div>
-        <label className="block text-sm font-medium mb-2">Capa</label>
+        <label className="block text-sm font-medium mb-3">
+          Materiais aceitos
+        </label>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {materiaisDisponiveis.map((material) => (
+            <label
+              key={material}
+              className="
+                flex
+                items-center
+                gap-3
+                bg-gray-100
+                px-4
+                py-3
+                rounded-lg
+                cursor-pointer
+                hover:bg-green-50
+                transition
+              "
+            >
+              <input
+                type="checkbox"
+                checked={materiaisAceitos.includes(material)}
+                onChange={() => alterarMaterial(material)}
+                className="w-4 h-4 accent-green-600"
+              />
+
+              <span className="text-sm text-gray-700">
+                {material}
+              </span>
+            </label>
+          ))}
+        </div>
+
+        {materiaisAceitos.length > 0 && (
+          <div className="mt-4">
+            <p className="text-xs text-gray-500 mb-2">
+              Materiais selecionados
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {materiaisAceitos.map((material) => (
+                <span
+                  key={material}
+                  className="
+                    bg-green-100
+                    text-green-700
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                  "
+                >
+                  {material}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Capa
+        </label>
 
         <select
           value={capa}
           onChange={(e) => setCapa(e.target.value)}
-          className="w-full bg-gray-100 px-4 py-2 rounded-lg outline-none"
+          className="
+            w-full
+            bg-gray-100
+            px-4
+            py-2
+            rounded-lg
+            outline-none
+          "
         >
-          <option value="">Selecione uma capa</option>
-          <option value="lixeira.jpg">Lixeira</option>
-          <option value="lixeiras.jpg">Lixeiras</option>
-          <option value="papel.jpg">Papel</option>
+          <option value="">
+            Selecione uma capa
+          </option>
+
+          <option value="lixeira.jpg">
+            Lixeira
+          </option>
+
+          <option value="lixeiras.jpg">
+            Lixeiras
+          </option>
+
+          <option value="papel.jpg">
+            Papel
+          </option>
         </select>
 
         {capa && (
           <img
             src={`/images/${capa}`}
             alt="Preview"
-            className="w-full h-52 object-cover rounded-lg mt-3"
+            className="
+              w-full
+              h-52
+              object-cover
+              rounded-lg
+              mt-3
+            "
           />
         )}
       </div>
 
-      {/* BOTÕES */}
       <div className="flex gap-3 pt-4">
         <button
           disabled={loading}
@@ -230,7 +340,11 @@ export default function FormAdicionarPonto() {
             disabled:opacity-50
           "
         >
-          {loading ? "Salvando..." : id ? "Atualizar" : "Criar"}
+          {loading
+            ? "Salvando..."
+            : id
+              ? "Atualizar"
+              : "Criar"}
         </button>
 
         <button

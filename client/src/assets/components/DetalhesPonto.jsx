@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import MapaVisualizacao from "./MapaVisualizacao";
@@ -41,6 +42,7 @@ export default function DetalhesPonto() {
 
     try {
       await api.delete(`/pontos/${id}`);
+
       alert("Ecoponto excluído com sucesso.");
       navigate("/");
     } catch (err) {
@@ -127,7 +129,6 @@ export default function DetalhesPonto() {
               <div className="p-5 md:p-6">
 
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900">
                       {ponto.nome}
@@ -169,6 +170,38 @@ export default function DetalhesPonto() {
 
                 <div className="mt-5">
                   <h2 className="text-base font-bold mb-3">
+                    Materiais aceitos
+                  </h2>
+
+                  {ponto.materiaisAceitos &&
+                  ponto.materiaisAceitos.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {ponto.materiaisAceitos.map((material, index) => (
+                        <span
+                          key={`${material}-${index}`}
+                          className="
+                            bg-green-100
+                            text-green-700
+                            px-3
+                            py-1.5
+                            rounded-full
+                            text-sm
+                            font-medium
+                          "
+                        >
+                          ♻️ {material}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      Nenhum material cadastrado.
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-5">
+                  <h2 className="text-base font-bold mb-3">
                     Localização
                   </h2>
 
@@ -204,7 +237,17 @@ export default function DetalhesPonto() {
 
                 <button
                   onClick={abrirMapa}
-                  className="w-full mt-4 bg-blue-600 text-white py-2.5 rounded-lg text-sm hover:bg-blue-700 transition"
+                  className="
+                    w-full
+                    mt-4
+                    bg-blue-600
+                    text-white
+                    py-2.5
+                    rounded-lg
+                    text-sm
+                    hover:bg-blue-700
+                    transition
+                  "
                 >
                   🗺️ Ver no Google Maps
                 </button>

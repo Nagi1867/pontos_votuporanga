@@ -6,6 +6,7 @@ export default function EcopontoCard({
   latitude,
   longitude,
   distancia,
+  materiaisAceitos,
   onDelete,
   onEdit,
   onDetails,
@@ -22,7 +23,6 @@ export default function EcopontoCard({
     }
 
     const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
-
     window.open(url, "_blank");
   }
 
@@ -37,10 +37,7 @@ export default function EcopontoCard({
   }
 
   function formatarDistancia() {
-    if (
-      distancia === null ||
-      distancia === undefined
-    ) {
+    if (distancia === null || distancia === undefined) {
       return null;
     }
 
@@ -143,6 +140,33 @@ export default function EcopontoCard({
           >
             {descricao}
           </p>
+        )}
+
+        {materiaisAceitos && materiaisAceitos.length > 0 && (
+          <div className="mt-4">
+            <p className="text-sm font-medium text-gray-700 mb-2">
+              Materiais aceitos
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {materiaisAceitos.map((material, index) => (
+                <span
+                  key={index}
+                  className="
+                    px-2.5
+                    py-1
+                    bg-green-50
+                    text-green-700
+                    rounded-full
+                    text-xs
+                    font-medium
+                  "
+                >
+                  {material}
+                </span>
+              ))}
+            </div>
+          </div>
         )}
 
         {latitude !== null &&

@@ -361,6 +361,7 @@ export default function Pontos() {
                     latitude={p.latitude}
                     longitude={p.longitude}
                     distancia={item.distancia}
+                    materiaisAceitos={p.materiaisAceitos}
                     onDelete={() => deletePonto(p.id)}
                     onEdit={() => navigate(`/adicionarponto/${p.id}`)}
                     onDetails={() => navigate(`/pontos/${p.id}`)}
