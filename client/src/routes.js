@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Pontos from "./assets/pages/Pontos";
 import AdicionarPonto from "./assets/pages/AdicionarPonto";
+import DetalhesPonto from "./assets/components/DetalhesPonto";
 
 export default function AppRoutes() {
   return (
@@ -9,6 +10,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Pontos />} />
         <Route path="/adicionarponto" element={<AdicionarPonto />} />
         <Route path="/adicionarponto/:id" element={<AdicionarPonto />} />
+        <Route path="/pontos/:id" element={<DetalhesPonto />} />
       </Routes>
     </BrowserRouter>
   );

@@ -8,6 +8,7 @@ export default function EcopontoCard({
   distancia,
   onDelete,
   onEdit,
+  onDetails,
 }) {
   function abrirMapa() {
     if (
@@ -49,7 +50,6 @@ export default function EcopontoCard({
   return (
     <div className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-lg transition relative">
 
-      {/* BOTÃO EXCLUIR */}
       <button
         onClick={confirmarExclusao}
         title="Excluir ecoponto"
@@ -83,9 +83,7 @@ export default function EcopontoCard({
         </svg>
       </button>
 
-      {/* CAPA */}
       <div className="h-44 bg-gray-200 flex items-center justify-center overflow-hidden">
-
         {capa ? (
           <img
             src={`/images/${capa}`}
@@ -104,66 +102,79 @@ export default function EcopontoCard({
             Sem imagem disponível
           </div>
         )}
-
       </div>
 
-      {/* CONTEÚDO */}
       <div className="p-5">
 
-        {/* NOME */}
         <h2 className="font-bold text-lg text-gray-800">
           {nome}
         </h2>
 
-        {/* ENDEREÇO */}
         <p className="text-sm text-gray-500 mt-1">
           📍 {endereco}
         </p>
 
-        {/* DISTÂNCIA */}
         {formatarDistancia() && (
-          <div className="
-            inline-flex
-            items-center
-            mt-3
-            px-3
-            py-1
-            rounded-full
-            bg-blue-50
-            text-blue-600
-            text-sm
-          ">
+          <div
+            className="
+              inline-flex
+              items-center
+              mt-3
+              px-3
+              py-1
+              rounded-full
+              bg-blue-50
+              text-blue-600
+              text-sm
+            "
+          >
             📏 {formatarDistancia()} km de distância
           </div>
         )}
 
-        {/* DESCRIÇÃO */}
         {descricao && (
-          <p className="
-            text-sm
-            text-gray-600
-            mt-4
-            line-clamp-3
-          ">
+          <p
+            className="
+              text-sm
+              text-gray-600
+              mt-4
+              line-clamp-3
+            "
+          >
             {descricao}
           </p>
         )}
 
-        {/* COORDENADAS */}
-        {latitude && longitude && (
-          <p className="text-xs text-gray-400 mt-4">
-            Lat: {latitude} | Lng: {longitude}
-          </p>
-        )}
+        {latitude !== null &&
+          latitude !== undefined &&
+          longitude !== null &&
+          longitude !== undefined && (
+            <p className="text-xs text-gray-400 mt-4">
+              Lat: {latitude} | Lng: {longitude}
+            </p>
+          )}
 
-        {/* BOTÕES */}
-        <div className="flex flex-col sm:flex-row gap-3 mt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-5">
 
-          {/* EDITAR */}
+          <button
+            onClick={onDetails}
+            className="
+              bg-gray-100
+              text-gray-700
+              py-2
+              rounded-lg
+              text-sm
+              font-medium
+              hover:bg-gray-200
+              transition
+            "
+          >
+            🔎 Detalhes
+          </button>
+
           <button
             onClick={onEdit}
             className="
-              flex-1
               bg-green-100
               text-green-700
               py-2
@@ -177,11 +188,9 @@ export default function EcopontoCard({
             ✏️ Editar
           </button>
 
-          {/* MAPA */}
           <button
             onClick={abrirMapa}
             className="
-              flex-1
               bg-blue-100
               text-blue-700
               py-2
@@ -192,13 +201,11 @@ export default function EcopontoCard({
               transition
             "
           >
-            🗺️ Ver no mapa
+            🗺️ Mapa
           </button>
 
         </div>
-
       </div>
-
     </div>
   );
 }

@@ -306,8 +306,8 @@ export default function Pontos() {
                 {pesquisa
                   ? "Não encontramos nenhum ponto com esse nome."
                   : modoProximos
-                  ? "Não encontramos pontos próximos à sua localização."
-                  : "Ainda não existem ecopontos cadastrados."}
+                    ? "Não encontramos pontos próximos à sua localização."
+                    : "Ainda não existem ecopontos cadastrados."}
               </p>
 
               <div className="mt-5 flex justify-center gap-3">
@@ -362,9 +362,8 @@ export default function Pontos() {
                     longitude={p.longitude}
                     distancia={item.distancia}
                     onDelete={() => deletePonto(p.id)}
-                    onEdit={() =>
-                      navigate(`/adicionarponto/${p.id}`)
-                    }
+                    onEdit={() => navigate(`/adicionarponto/${p.id}`)}
+                    onDetails={() => navigate(`/pontos/${p.id}`)}
                   />
                 );
               })}
