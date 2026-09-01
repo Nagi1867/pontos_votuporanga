@@ -19,14 +19,21 @@ services:
     restart: always
     environment:
       TZ: America/Sao_Paulo
+
       SPRING.DATASOURCE.URL: jdbc:postgresql://db:5432/ecotudo
       SPRING.DATASOURCE.USERNAME: postgres
       SPRING.DATASOURCE.PASSWORD: jao
       SPRING.JPA.DATABASE-PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+
+      JWT_SECRET: 8f3c9a72d5e14b6c90a2f7e31d8c5b4a6e9f1234567890abcdef1234567890ab
+      JWT_EXPIRATION: 86400000
+
     ports:
       - 8080:8080
+
     depends_on:
       - db
+
     networks:
       - gabriel-network
 
