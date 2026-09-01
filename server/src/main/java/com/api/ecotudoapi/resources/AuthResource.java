@@ -1,5 +1,6 @@
 package com.api.ecotudoapi.resources;
 
+import com.api.ecotudoapi.dto.CadastroDTO;
 import com.api.ecotudoapi.dto.LoginDTO;
 import com.api.ecotudoapi.dto.LoginResponseDTO;
 import com.api.ecotudoapi.services.AuthService;
@@ -22,5 +23,14 @@ public class AuthResource {
         LoginResponseDTO response = service.login(dados);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/cadastro")
+    public ResponseEntity<Void> cadastrar(
+            @RequestBody CadastroDTO dados
+    ) {
+        service.cadastrar(dados);
+
+        return ResponseEntity.ok().build();
     }
 }

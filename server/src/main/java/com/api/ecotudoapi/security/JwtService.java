@@ -1,8 +1,8 @@
 package com.api.ecotudoapi.security;
 
+import com.api.ecotudoapi.entities.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,9 +18,15 @@ public class JwtService {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private Long expiration;
+    private long expiration;
 
-    public String gerarToken(String email) {
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(
+                secret.getBytes(StandardCharsets.UTF_8)
+        );
+    }
+
+    public String gerarToken(Usuario usuario) {
 
         Date agora = new Date();
 
@@ -29,13 +35,15 @@ public class JwtService {
         );
 
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(agora)
-                .setExpiration(expiracao)
-                .signWith(
-                        SignatureAlgorithm.HS256,
-                        secret
-                )
+                .subject(usuario.getEmail())
+
+                .claim("nome", usuario.getNome())
+                .claim("role", usuario.getRole().name())
+
+                .issuedAt(agora)
+                .expiration(expiracao)
+
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -45,15 +53,22 @@ public class JwtService {
                 .getSubject();
     }
 
+    public String extrairRole(String token) {
+
+        return extrairClaims(token)
+                .get("role", String.class);
+    }
+
     public boolean validarToken(String token) {
 
         try {
 
-            Claims claims = extrairClaims(token);
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token);
 
-            return !claims
-                    .getExpiration()
-                    .before(new Date());
+            return true;
 
         } catch (Exception e) {
 
@@ -63,12 +78,8 @@ public class JwtService {
 
     private Claims extrairClaims(String token) {
 
-        SecretKey key = Keys.hmacShaKeyFor(
-                secret.getBytes(StandardCharsets.UTF_8)
-        );
-
         return Jwts.parser()
-                .verifyWith(key)
+                .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
