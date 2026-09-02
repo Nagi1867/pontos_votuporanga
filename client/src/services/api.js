@@ -4,7 +4,7 @@ const dev = "http://localhost:8080";
 const prod = "https://pontos-votuporanga-1.onrender.com";
 
 const api = axios.create({
-  baseURL: dev,
+  baseURL: prod,
 });
 
 // Adiciona o JWT automaticamente
