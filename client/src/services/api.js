@@ -1,11 +1,26 @@
 import axios from "axios";
 
-let dev = 'http://localhost:8080'
-let prod = 'https://pontos-votuporanga-1.onrender.com'
+const dev = "http://localhost:8080";
+const prod = "https://pontos-votuporanga-1.onrender.com";
 
 const api = axios.create({
-    baseURL: dev,
+  baseURL: dev,
+});
 
-})
+// Adiciona o JWT automaticamente
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
 
-export default api
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default api;

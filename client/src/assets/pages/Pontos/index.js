@@ -19,31 +19,47 @@ export default function Pontos() {
   const [buscandoProximos, setBuscandoProximos] = useState(false);
   const [modoProximos, setModoProximos] = useState(false);
 
+  // Role do usuário logado
+  const [role, setRole] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    const usuarioRole = localStorage.getItem("role");
+
+    setRole(usuarioRole);
+
     carregarPontos();
   }, []);
 
-  async function carregarPontos() {
-    try {
-      setLoading(true);
-      setErro("");
+async function carregarPontos() {
+  try {
+    setLoading(true);
+    setErro("");
 
-      const response = await api.get("/pontos");
+    const response = await api.get("/pontos");
 
-      setPontos(response.data);
-      setModoProximos(false);
-    } catch (err) {
-      console.error(err);
+    console.log("STATUS:", response.status);
+    console.log("RESPOSTA /pontos:", response.data);
+    console.log("É ARRAY?", Array.isArray(response.data));
 
-      setErro(
-        "Não foi possível carregar os ecopontos. Verifique a conexão com o servidor."
-      );
-    } finally {
-      setLoading(false);
-    }
+    setPontos(response.data);
+    setModoProximos(false);
+
+  } catch (err) {
+    console.error("ERRO:", err);
+    console.error("STATUS:", err.response?.status);
+    console.error("DATA:", err.response?.data);
+
+    setErro(
+      err.response?.data?.error ||
+      "Não foi possível carregar os ecopontos."
+    );
+
+  } finally {
+    setLoading(false);
   }
+}
 
   async function deletePonto(id) {
     const confirmar = window.confirm(
@@ -65,9 +81,15 @@ export default function Pontos() {
     } catch (err) {
       console.error(err);
 
-      setErro(
-        "Não foi possível excluir o ecoponto. Tente novamente."
-      );
+      if (err.response?.status === 403) {
+        setErro(
+          "Você não possui permissão para excluir este ecoponto."
+        );
+      } else {
+        setErro(
+          "Não foi possível excluir o ecoponto. Tente novamente."
+        );
+      }
     }
   }
 
@@ -178,6 +200,8 @@ export default function Pontos() {
 
         <main className="p-4 md:p-6 lg:p-8 space-y-6">
 
+          {/* Título */}
+
           <div>
             <h1 className="text-2xl font-bold text-gray-800">
               Ecopontos
@@ -188,10 +212,17 @@ export default function Pontos() {
             </p>
           </div>
 
+
+          {/* Estatísticas */}
+
           <Stats pontos={pontos} />
+
+
+          {/* Mensagem de erro */}
 
           {erro && (
             <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+
               <p className="text-sm">
                 {erro}
               </p>
@@ -202,17 +233,28 @@ export default function Pontos() {
               >
                 Tentar novamente
               </button>
+
             </div>
           )}
 
+
+          {/* Botões */}
+
           <div className="flex flex-col sm:flex-row gap-3">
 
-            <button
-              onClick={() => navigate("/adicionarponto")}
-              className="bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition"
-            >
-              + Novo Ecoponto
-            </button>
+            {/* SOMENTE ADMIN */}
+
+            {role === "ADMIN" && (
+              <button
+                onClick={() => navigate("/adicionarponto")}
+                className="bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition"
+              >
+                + Novo Ecoponto
+              </button>
+            )}
+
+
+            {/* Todos os usuários */}
 
             <button
               onClick={buscarPontosProximos}
@@ -223,6 +265,9 @@ export default function Pontos() {
                 ? "Buscando localização..."
                 : "📍 Pontos próximos"}
             </button>
+
+
+            {/* Mostrar todos */}
 
             {(modoProximos || pesquisa) && (
               <button
@@ -235,14 +280,21 @@ export default function Pontos() {
 
           </div>
 
+
+          {/* Aviso de pontos próximos */}
+
           {modoProximos && (
             <div className="bg-blue-50 border border-blue-200 text-blue-700 rounded-xl px-4 py-3 text-sm">
               📍 Mostrando ecopontos próximos à sua localização.
             </div>
           )}
 
+
+          {/* Resultado da pesquisa */}
+
           {pesquisa && (
             <div className="flex items-center justify-between text-sm text-gray-600">
+
               <span>
                 Resultados para:{" "}
                 <strong>{pesquisa}</strong>
@@ -254,8 +306,12 @@ export default function Pontos() {
               >
                 Limpar
               </button>
+
             </div>
           )}
+
+
+          {/* Loading */}
 
           {loading ? (
 
@@ -266,6 +322,7 @@ export default function Pontos() {
                   key={item}
                   className="bg-white rounded-2xl shadow overflow-hidden animate-pulse"
                 >
+
                   <div className="h-40 bg-gray-200" />
 
                   <div className="p-5 space-y-3">
@@ -285,12 +342,16 @@ export default function Pontos() {
                     </div>
 
                   </div>
+
                 </div>
               ))}
 
             </div>
 
+
           ) : pontos.length === 0 ? (
+
+            /* Nenhum ponto */
 
             <div className="bg-white rounded-2xl shadow p-10 text-center">
 
@@ -303,14 +364,19 @@ export default function Pontos() {
               </h2>
 
               <p className="text-gray-500 mt-2">
+
                 {pesquisa
                   ? "Não encontramos nenhum ponto com esse nome."
                   : modoProximos
                     ? "Não encontramos pontos próximos à sua localização."
                     : "Ainda não existem ecopontos cadastrados."}
+
               </p>
 
+
               <div className="mt-5 flex justify-center gap-3">
+
+                {/* Limpar pesquisa */}
 
                 {pesquisa && (
                   <button
@@ -321,14 +387,24 @@ export default function Pontos() {
                   </button>
                 )}
 
-                {!pesquisa && !modoProximos && (
-                  <button
-                    onClick={() => navigate("/adicionarponto")}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                  >
-                    Adicionar primeiro ecoponto
-                  </button>
-                )}
+
+                {/* SOMENTE ADMIN */}
+
+                {!pesquisa &&
+                  !modoProximos &&
+                  role === "ADMIN" && (
+
+                    <button
+                      onClick={() => navigate("/adicionarponto")}
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                    >
+                      Adicionar primeiro ecoponto
+                    </button>
+
+                  )}
+
+
+                {/* Mostrar todos */}
 
                 {modoProximos && (
                   <button
@@ -343,7 +419,10 @@ export default function Pontos() {
 
             </div>
 
+
           ) : (
+
+            /* Lista de ecopontos */
 
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
 
@@ -352,29 +431,57 @@ export default function Pontos() {
                 const p = item.ponto || item;
 
                 return (
+
                   <EcopontoCard
                     key={p.id}
+
                     nome={p.nome}
+
                     endereco={p.localizacao}
+
                     descricao={p.descricao}
+
                     capa={p.capa}
+
                     latitude={p.latitude}
+
                     longitude={p.longitude}
+
                     distancia={item.distancia}
+
                     materiaisAceitos={p.materiaisAceitos}
+
+                    /*
+                     * Somente ADMIN pode
+                     * editar/excluir.
+                     */
+
+                    podeEditar={role === "ADMIN"}
+
                     onDelete={() => deletePonto(p.id)}
-                    onEdit={() => navigate(`/adicionarponto/${p.id}`)}
-                    onDetails={() => navigate(`/pontos/${p.id}`)}
+
+                    onEdit={() =>
+                      navigate(`/adicionarponto/${p.id}`)
+                    }
+
+                    onDetails={() =>
+                      navigate(`/pontos/${p.id}`)
+                    }
+
                   />
+
                 );
+
               })}
 
             </div>
+
           )}
 
         </main>
+
       </div>
+
     </div>
   );
 }
-
