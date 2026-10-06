@@ -67,7 +67,7 @@ export default function Login() {
         role,
       });
 
-      navigate("/");
+      navigate("/pontos");
     } catch (error) {
       console.error("Erro no login:", error);
 
